@@ -42,6 +42,16 @@ class MatrixGraph:
     def is_plateau(self, start):
         raise NotImpementedError()
 
+    '''
+    summary: given a coordinate, returns the coordinates of the neighbors of a
+      cell given they are in range (not outside the dimensions of the matrix)
+    requires: coord to a be tuple (row, column) that represents the location of
+      a cell in bounds
+    effects: returns a list of all the neighbors of coord in bounds
+    '''
+    def get_neighbors(self, coord):
+        
+
 def main():
     print('hello')
     mg = MatrixGraph()
