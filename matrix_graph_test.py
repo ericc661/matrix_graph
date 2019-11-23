@@ -66,5 +66,89 @@ class test_get_neighbors(unittest.TestCase):
         self.assertIn((3, 3), neighbors)
         self.assertIn((3, 4), neighbors)
 
+
+class test_mark_map(unittest.TestCase):
+
+    # 3 plateaus
+    def test1(self):
+        mg = MatrixGraph([ [4, 5, 2],
+                           [1, 5, 5],
+                           [2, 3, 1]])
+        expected = [[False, True, False],
+                    [False, True, True],
+                    [False, False, False]]
+        self.assertEqual(expected, mg.mark_plateaus())
+
+    # smallest case
+    def test2(self):
+        mg = MatrixGraph([ [3] ])
+        expected = [ [True] ]
+        self.assertEqual(expected, mg.mark_plateaus())
+
+    # isolated high points
+    def test3(self):
+        mg = MatrixGraph([ [1, 8, 2, 5],
+                           [6, 7, 4, 3],
+                           [9, 8, 2, 3],
+                           [1, 4, 2, 2]])
+        expected = [[False, True, False, True],
+                    [False, False, False, False],
+                    [True, False, False, False],
+                    [False, False, False, False]]
+        self.assertEqual(expected, mg.mark_plateaus())
+
+    # two fail to be a plateau because higher neighbor
+    def test4(self):
+        mg = MatrixGraph([ [1, 9, 1],
+                           [3, 5, 4],
+                           [2, 5, 1]])
+        expected = [[False, True, False],
+                    [False, False, False],
+                    [False, False, False]]
+        self.assertEqual(expected, mg.mark_plateaus())
+
+    # similar to last except diagonally connected
+    # also tests that the region of 1s are not marked plateaus
+    def test5(self):
+        mg = MatrixGraph([ [4, 5, 2],
+                           [5, 1, 5],
+                           [8, 1, 1]])
+        expected = [[False, False, False],
+                    [False, False, False],
+                    [True, False, False]]
+        self.assertEqual(expected, mg.mark_plateaus())
+
+    # diagonally connected region IS plateaus
+    def test6(self):
+        mg = MatrixGraph([ [4, 5, 2],
+                           [5, 1, 5],
+                           [3, 1, 1]])
+        expected = [[False, True, False],
+                    [True, False, True],
+                    [False, False, False]]
+        self.assertEqual(expected, mg.mark_plateaus())
+
+    # everything except one high point is a plateau
+    def test7(self):
+        mg = MatrixGraph([ [5, 5, 5],
+                           [5, 5, 5],
+                           [5, 5, 9]])
+        expected = [[False, False, False],
+                    [False, False, False],
+                    [False, False, True]]
+        self.assertEqual(expected, mg.mark_plateaus())
+
+    # reverse of the last one
+    def test8(self):
+        mg = MatrixGraph([ [9, 9, 9],
+                           [9, 9, 9],
+                           [9, 9, 5]])
+        expected = [[True, True, True],
+                    [True, True, True],
+                    [True, True, False]]
+        self.assertEqual(expected, mg.mark_plateaus())
+
+
+    # similar, except diagonally connected
 if __name__ == '__main__':
     unittest.main()

@@ -15,18 +15,19 @@ class MatrixGraph:
 
     '''
     summary: returns a matrix of same dimensions as input indicating plateau
-      high points
+      high points - marks the entire map as opposed to starting at one coordinate
     requires: nothing
     effects: returns a List[List[bool]], true for every coordinate that is a
       plateau high point (see below for definition).
     '''
     def mark_plateaus(self):
-        # set a self.plateau_matrix that can be accessed by is_plateau
-        raise NotImpementedError()
+        # init matrix of bools same size as input matrix
+        self.plateau_matrix = [[None] * len(self.matrix[0])] * len(self.matrix)
+        raise NotImplementedError()
 
     '''
     summary: given a start coordinate, determines if it is a plateau high point
-      and mark it and its connected plateau high points (if applicable)
+      and marks it and its connected plateau high points (if applicable)
       accordingly
     requires: start vertex to be in bounds of the matrix
     effects: Marks the coordinate True if it is a plateau high point.
@@ -38,8 +39,8 @@ class MatrixGraph:
       plateau high points true in the return matrix. Otherwise, leaves the
       coordinate's value default (False)
     '''
-    def is_plateau(self, start):
-        raise NotImpementedError()
+    def mark_pleateau_region(self, start):
+        raise NotImplementedError()
 
     '''
     summary: given a coordinate, returns the coordinates of the neighbors of a
