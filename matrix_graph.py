@@ -12,7 +12,6 @@ class MatrixGraph:
     '''
     def __init__(self, matrix):
         self.matrix = matrix
-        print('hell o')
 
     '''
     summary: returns a matrix of same dimensions as input indicating plateau
@@ -50,11 +49,19 @@ class MatrixGraph:
     effects: returns a list of all the neighbors of coord in bounds
     '''
     def get_neighbors(self, coord):
-        
+        (row, col) = coord
+        neighborlist = [(-1, -1), (-1, 0), (-1, 1),
+                        (0, -1), (0, 1),
+                        (1, -1), (1, 0), (1, 1),]
+
+        neighbors = [(row+x, col+y) for (x, y) in neighborlist
+                      if 0 <= row+x < len(self.matrix) and \
+                         0 <= col+y < len(self.matrix[0]) ]
+
+        return neighbors
 
 def main():
-    print('hello')
-    mg = MatrixGraph()
+    pass
 
 if __name__ == '__main__':
     main()
