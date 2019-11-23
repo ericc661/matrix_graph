@@ -15,32 +15,60 @@ class MatrixGraph:
 
     '''
     summary: returns a matrix of same dimensions as input indicating plateau
-      high points - marks the entire map as opposed to starting at one coordinate
+      high points - marks the entire map
     requires: nothing
     effects: returns a List[List[bool]], true for every coordinate that is a
       plateau high point (see below for definition).
     '''
     def mark_plateaus(self):
         # init matrix of bools same size as input matrix
-        self.plateau_matrix = [[None] * len(self.matrix[0])] * len(self.matrix)
-        raise NotImplementedError()
+        self.plateau_matrix = []
+        for i in range(len(self.matrix)):
+            self.plateau_matrix.append([None] * len(self.matrix[0]))
+
+        for i in range(len(self.plateau_matrix)):
+            for j in range(len(self.plateau_matrix[0])):
+                # if we haven't marked this coordinate yet
+                if self.plateau_matrix[i][j] is None:
+                    self.mark_plateau_region((i, j))
+
+        return self.plateau_matrix
 
     '''
-    summary: given a start coordinate, determines if it is a plateau high point
-      and marks it and its connected plateau high points (if applicable)
-      accordingly
+    summary: marks a region of connected same-height coordinates as true if they
+      are ALL plateau high points, false if they are all not
     requires: start vertex to be in bounds of the matrix
-    effects: Marks the coordinate True if it is a plateau high point.
+    effects: See summary.
       A coordinate may be a plateau high point if the matrix's value at that
       coordinate is greater than or equal to all its neighbors, 8-directionally.
       However, for all neighbors that have equal height (if any), those
-      neighbors must in turn be a plateau high point. If a coordinate is a
-      plateau high point, this function returns true and marks it and all connected
-      plateau high points true in the return matrix. Otherwise, leaves the
-      coordinate's value default (False)
+      neighbors must in turn be a plateau high point. If a same-height region is a
+      plateau, this function returns true and marks the enitre region true in the return matrix.
+      Otherwise, marks them false.
     '''
-    def mark_pleateau_region(self, start):
-        raise NotImplementedError()
+    def mark_plateau_region(self, start):
+        q = [] # queue for BFS traversal of equal-height coords
+        region = [] # stores all equal-height connected coordinates, serves as visited state
+        q.append(start)
+        region.append(start)
+        higher_point_found = False # flag set true if ANY coords see higher point
+
+        while q:
+            (row, col) = q.pop(0) # row and column of current coord
+            neighbors = self.get_neighbors((row, col))
+            for (i, j) in neighbors:
+                if self.matrix[i][j] > self.matrix[row][col]:
+                    higher_point_found = True #'ruins' region being plateau high points
+                elif self.matrix[i][j] == self.matrix[row][col]:
+                    if (i, j) not in region: # if not yet visited
+                        q.append((i, j))
+                        region.append((i, j))
+
+        # at this point, we have entire connected region and whether
+        #   region is plateau high points or not
+        is_plateau = not higher_point_found
+        for (i, j) in region:
+            self.plateau_matrix[i][j] = is_plateau
 
     '''
     summary: given a coordinate, returns the coordinates of the neighbors of a
